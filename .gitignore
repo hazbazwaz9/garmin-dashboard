@@ -1,0 +1,11 @@
+# Your synced Garmin data. Personal health data - keep it out of git
+# unless you have decided you want it published.
+garmin/
+
+# The CI token bundle from --export-ci-token. This is a login credential.
+garmin-ci-token.txt
+
+__pycache__/
+*.pyc
+.venv/
+venv/

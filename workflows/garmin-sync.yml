@@ -1,0 +1,42 @@
+# Path A: pull Garmin data every morning in the cloud.
+# Copy this file to .github/workflows/garmin-sync.yml in your own repo.
+#
+# Required secret: GARMIN_TOKEN_B64 (from: python sync_garmin.py --export-ci-token)
+# Only needed for the database sink: GARMIN_INGEST_URL, SESSION_LOG_SECRET
+#
+# Files-only, no database? Change the last step to:
+#   python sync_garmin.py --days 3 --sink files --out ./garmin
+# and delete the two ingest secrets below.
+
+name: Garmin sync
+
+on:
+  schedule:
+    - cron: "0 12 * * *" # 12:00 UTC daily (adjust to your morning)
+  workflow_dispatch: # lets you run it by hand from the Actions tab
+
+permissions:
+  contents: read
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Sync Garmin
+        env:
+          # The saved login token. Never echoed: GitHub masks secrets in logs.
+          GARMIN_TOKEN_B64: ${{ secrets.GARMIN_TOKEN_B64 }}
+          # Where to POST the data, and the shared secret your endpoint checks.
+          GARMIN_INGEST_URL: ${{ secrets.GARMIN_INGEST_URL }}
+          GARMIN_INGEST_SECRET: ${{ secrets.SESSION_LOG_SECRET }}
+        run: python sync_garmin.py --days 3 --sink supabase

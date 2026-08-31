@@ -1,0 +1,11 @@
+# Everything the sync script needs.
+#   pip install -r requirements.txt
+# On Windows, if "pip" is not found: py -m pip install -r requirements.txt
+
+# The open-source Garmin Connect client this script wraps:
+# https://github.com/cyberjunky/python-garminconnect
+garminconnect>=0.2.19
+
+# Pulled in by garminconnect, pinned to a floor so the login flow works:
+garth>=0.5.7
+requests>=2.31.0

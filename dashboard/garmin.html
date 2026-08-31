@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recovery dashboard</title>
+<meta name="description" content="Sleep, HRV, resting heart rate, body battery and workouts from Garmin, on one page.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="stylesheet" href="garmin-dashboard.css">
+</head>
+<body>
+
+<main class="dash">
+  <section class="dash-head">
+    <div class="wrap">
+      <span class="eyebrow">Garmin</span>
+      <h1>Recovery dashboard</h1>
+      <p class="lead">Sleep, HRV, resting heart rate and body battery, alongside the workouts that moved them. The same data your AI coach reads, drawn out so you can see the trend at a glance.</p>
+      <div class="dash-meta" id="dash-meta"></div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <div class="dash-banner" id="dash-banner" hidden></div>
+
+    <div class="dash-filters">
+      <div class="seg" id="range-filter" role="radiogroup" aria-label="Date range">
+        <button type="button" role="radio" data-range="7" aria-checked="false">7 days</button>
+        <button type="button" role="radio" data-range="30" aria-checked="true">30 days</button>
+        <button type="button" role="radio" data-range="90" aria-checked="false">90 days</button>
+      </div>
+      <span class="grow"></span>
+      <button type="button" class="ghost" id="btn-table" aria-pressed="false" aria-controls="daily-table">Show data table</button>
+      <button type="button" class="ghost" id="btn-source">Data source</button>
+    </div>
+
+    <section class="dash-top" aria-label="Today at a glance">
+      <div class="panel hero-card" id="hero-card"></div>
+      <div class="kpi-row" id="kpi-row"></div>
+    </section>
+
+    <section class="chart-grid" aria-label="Trends">
+      <figure class="panel chart-card" id="c-sleep">
+        <figcaption>
+          <h2>Sleep</h2>
+          <p class="c-sub">Hours asleep each night</p>
+        </figcaption>
+        <div class="plot"></div>
+      </figure>
+
+      <figure class="panel chart-card" id="c-hrv">
+        <figcaption>
+          <h2>Overnight HRV</h2>
+          <p class="c-sub">Higher and steady is the healthy pattern</p>
+        </figcaption>
+        <div class="plot"></div>
+      </figure>
+
+      <figure class="panel chart-card" id="c-rhr">
+        <figcaption>
+          <h2>Resting heart rate</h2>
+          <p class="c-sub">A jump above your normal often lands before you feel it</p>
+        </figcaption>
+        <div class="plot"></div>
+      </figure>
+
+      <figure class="panel chart-card" id="c-bb">
+        <figcaption>
+          <h2>Body battery</h2>
+          <p class="c-sub">Each day from its low to its peak</p>
+        </figcaption>
+        <div class="plot"></div>
+      </figure>
+    </section>
+
+    <section id="daily-table" class="section-gap" aria-label="All readings" hidden>
+      <div class="table-wrap" id="daily-table-wrap"></div>
+    </section>
+
+    <section class="section-gap" aria-label="Workouts">
+      <h2 class="sec">Workouts</h2>
+      <div class="table-wrap" id="activity-wrap"></div>
+    </section>
+
+    <p class="dash-foot">Read-only. Nothing here is ever written back to your Garmin account.</p>
+  </div>
+</main>
+
+<dialog class="src-dialog" id="src-dialog" aria-labelledby="src-title">
+  <div class="src-body">
+    <h3 id="src-title">Where should the dashboard read from?</h3>
+    <p>Point it at the <code>data.json</code> that <code>sync_garmin.py</code> writes.</p>
+
+    <div class="drop" id="src-drop" tabindex="0" role="button" aria-label="Choose a data.json file from this computer">
+      <strong>Open a data.json from this computer</strong><br>
+      Drop the file here, or click to pick it
+    </div>
+    <input type="file" id="src-file" accept="application/json,.json" hidden>
+
+    <div class="src-or">or read it from a URL</div>
+    <div class="src-field">
+      <label class="sr-only" for="src-url">Data URL</label>
+      <input type="url" id="src-url" placeholder="https://example.com/garmin/data.json" spellcheck="false">
+      <button type="button" class="btn" id="src-save">Use</button>
+    </div>
+
+    <p class="src-note">A file you open from this computer is read in your browser and never uploaded anywhere. A URL is remembered in this browser only. If you publish this page somewhere public, remember that a <code>garmin/</code> folder published beside it is readable by anyone with the link.</p>
+
+    <div class="src-actions">
+      <button type="button" class="ghost" id="src-sample">Show sample data</button>
+      <button type="button" class="ghost" id="src-cancel">Close</button>
+    </div>
+  </div>
+</dialog>
+
+<script src="garmin-dashboard.js"></script>
+</body>
+</html>
